@@ -13,6 +13,12 @@ Also, this project borrows and modifies some codes from [cliclack](https://githu
 
 ## Installation
 
+- One-Liner
+
+    ```sh
+    cargo install --git https://github.com/JiwanChung/rgoto --locked
+    ```
+
 1. Ensure you have Rust installed. You can install Rust using [rustup](https://rustup.rs/).
 
 2. Build the project:
