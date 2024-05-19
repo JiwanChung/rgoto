@@ -82,7 +82,6 @@ fn ssh_into_host(entry: &SSHConfigEntry) -> Result<(), Box<dyn std::error::Error
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let hosts = parse_ssh_config()?;
-    println!("No host selected");
 
     if hosts.is_empty() {
         eprintln!("No hosts found in ~/.ssh/config");
