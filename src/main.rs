@@ -35,7 +35,7 @@ fn parse_ssh_config() -> io::Result<HashMap<String, SSHConfigEntry>> {
         if line.starts_with("Host ") {
             if let Some(host) = line.strip_prefix("Host ") {
                 current_host = Some(host.to_string());
-                hosts.insert(host.to_string(), SSHConfigEntry { hostname: host.to_string(), username: None });
+                hosts.insert(host.to_string(), SSHConfigEntry { hostname: host.to_string(), username: None, latency: None });
             }
         } else if line.starts_with("  User ") {
             if let Some(user) = line.strip_prefix("User ") {
