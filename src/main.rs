@@ -2,6 +2,8 @@ mod prompt;
 mod theme;
 mod select;
 
+use std::time::Duration;
+use std::str;
 use dirs::home_dir;
 use std::collections::HashMap;
 use std::fs::File;
@@ -14,6 +16,7 @@ use crate::select::select;
 struct SSHConfigEntry {
     hostname: String,
     username: Option<String>,
+    latency: Option<f64>, // Added to store latency
 }
 
 fn parse_ssh_config() -> io::Result<HashMap<String, SSHConfigEntry>> {
@@ -23,6 +26,7 @@ fn parse_ssh_config() -> io::Result<HashMap<String, SSHConfigEntry>> {
     let reader = io::BufReader::new(file);
 
     let mut hosts = HashMap::new();
+    add_latency_to_hosts(&mut hosts);
     let mut current_host = None;
 
     for line in reader.lines() {
@@ -47,6 +51,39 @@ fn parse_ssh_config() -> io::Result<HashMap<String, SSHConfigEntry>> {
     Ok(hosts)
 }
 
+fn ping_host(hostname: &str) -> Option<f64> {
+    let output = Command::new("ping")
+        .arg("-c")
+        .arg("1") // Send only 1 ping
+        .arg(hostname)
+        .output()
+        .ok()?;
+
+    if !output.status.success() {
+        return None;
+    }
+
+    let output_str = str::from_utf8(&output.stdout).ok()?;
+    // Parse the output to extract the latency (time=XXX ms)
+    output_str.lines().find_map(|line| {
+        if line.contains("time=") {
+            let parts: Vec<&str> = line.split("time=").collect();
+            if parts.len() > 1 {
+                let latency_str = parts[1].split_whitespace().next()?;
+                return latency_str.parse::<f64>().ok();
+            }
+        }
+        None
+    })
+}
+
+fn add_latency_to_hosts(hosts: &mut HashMap<String, SSHConfigEntry>) {
+    for entry in hosts.values_mut() {
+        entry.latency = ping_host(&entry.hostname);
+    }
+}
+
+
 fn select_host_cli(hosts: &HashMap<String, SSHConfigEntry>) -> Option<String> {
     let mut sorted_hosts: Vec<&String> = hosts.keys().collect();
     sorted_hosts.sort();
@@ -55,8 +92,8 @@ fn select_host_cli(hosts: &HashMap<String, SSHConfigEntry>) -> Option<String> {
     for (index, hostname) in sorted_hosts.iter().enumerate() {
         let entry = hosts.get(*hostname).unwrap();
         let description = match &entry.username {
-            Some(username) => format!("User: {}", username),
-            None => String::from(""),
+            Some(username) => format!("User: {}, Latency: {:?}", username, entry.latency),
+            None => format!("Latency: {:?}", entry.latency),
         };
         let label = format!("({}) {}", index, *hostname);
         selector = selector.item(*hostname, label, &description);
