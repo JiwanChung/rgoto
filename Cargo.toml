@@ -1,7 +1,9 @@
 [package]
 name = "rgoto"
 version = "0.1.0"
+authors = ["Jiwan Chung <jiwan.chung.research@gmail.com>"]
 edition = "2021"
+license = "MIT OR Apache-2.0" # Or another appropriate license
 
 [dependencies]
 cliclack = "0.2.5"
