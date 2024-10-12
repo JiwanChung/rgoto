@@ -17,7 +17,7 @@ Also, this project borrows and modifies some codes from [cliclack](https://githu
 - One-Liner
 
     ```sh
-    cargo install --git https://github.com/JiwanChung/rgoto --locked
+    cargo install rgoto --locked
     ```
 
 1. Ensure you have Rust installed. You can install Rust using [rustup](https://rustup.rs/).
@@ -33,6 +33,8 @@ Also, this project borrows and modifies some codes from [cliclack](https://githu
     ```sh
     cp ./target/release/rgoto $HOME/.local/bin
     ```
+
+## Usage
   
 
 1. Run the project:
@@ -43,6 +45,10 @@ Also, this project borrows and modifies some codes from [cliclack](https://githu
 
 
 2. Follow the prompts to select a host from your SSH config and connect.
+
+## Caveats
+
+For latency retrieval, ensure you have visited each server at least once before using `rgoto`.
 
 ## License
 
