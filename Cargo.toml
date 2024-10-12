@@ -4,6 +4,7 @@ version = "0.1.0"
 authors = ["Jiwan Chung <jiwan.chung.research@gmail.com>"]
 edition = "2021"
 license = "MIT" # Or another appropriate license
+description = "rgoto is a Rust-based command-line tool that reads your SSH configuration file (~/.ssh/config), presents a list of configured hosts, and allows you to select one to SSH into interactively. This work is partially inspired by goto. Also, this project borrows and modifies some codes from cliclack to support hjkl and index based navigation."
 
 [dependencies]
 cliclack = "0.2.5"
