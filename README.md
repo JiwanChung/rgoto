@@ -10,6 +10,7 @@ Also, this project borrows and modifies some codes from [cliclack](https://githu
 - Displays a list of configured SSH hosts for easy selection.
 - Supports reading usernames specified in the SSH config file.
 - Uses the system's `ssh` command to establish an interactive SSH session.
+- (New) now supports latency checks! Just select the first option and hit Enter.
 
 ## Installation
 
